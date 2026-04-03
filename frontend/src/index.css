@@ -1,0 +1,50 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: 'Inter', 'Roboto', sans-serif; background: linear-gradient(170deg, #e8f1ff 0%, #f5f7fb 42%, #ffffff 100%); color: #1b2f4b; }
+body.dark-mode { background: radial-gradient(circle at top center, #1f2b46 0%, #0f172b 60%, #060a12 100%); color: #e3e9ff; }
+body.dark-mode .social-card { background: #161f35 !important; border-color: #2d3f5d; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35); }
+body.dark-mode .social-mute { color: #8fa2c5; }
+body.dark-mode input, body.dark-mode textarea, body.dark-mode .MuiPaper-root { background: #1f293b; color: #e8ecff; }
+#root { min-height: 100vh; }
+.social-card { border-radius: 16px; box-shadow: 0 10px 30px rgba(38, 77, 143, 0.12); }
+.social-mute { color: #5a6781; }
+
+/* Mobile-first responsive design */
+@media (max-width: 600px) {
+  body { font-size: 14px; }
+  .social-card { border-radius: 12px; padding: 12px !important; }
+  .MuiTextField-root { font-size: 14px; }
+  .MuiButton-root { font-size: 13px; padding: 6px 12px; }
+  .MuiTypography-h3 { font-size: 1.5rem !important; }
+  .MuiTypography-h5 { font-size: 1rem !important; }
+  .MuiCard-root { margin-bottom: 12px !important; }
+}
+
+@media (max-width: 400px) {
+  body { font-size: 12px; }
+  .social-card { padding: 8px !important; }
+  .MuiButton-root { font-size: 11px; padding: 4px 8px; }
+  .MuiTypography-h3 { font-size: 1.2rem !important; }
+  .MuiIconButton-root { width: 40px !important; height: 40px !important; }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  .social-card { border-radius: 14px; }
+}
+
+@media (min-width: 1025px) {
+  .social-card { border-radius: 16px; }
+}
+
+/* Tablet and below adjustments */
+@media (max-width: 768px) {
+  .MuiPaper-root { margin-bottom: 12px !important; }
+  .MuiForm-root { gap: 12px !important; }
+}
+
+/* Responsive image sizing */
+.post-image { max-width: 100%; height: auto; border-radius: 8px; }
+
+@media (max-width: 600px) {
+  .post-image { border-radius: 6px; }
+}
+
