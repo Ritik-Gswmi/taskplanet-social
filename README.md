@@ -12,8 +12,8 @@ This project demonstrates **full-stack development skills**, authentication syst
 
 | Platform | Link |
 |--------|------|
-| Frontend (Vercel) | https://your-vercel-link.vercel.app |
-| Backend API (Render) | https://your-render-link.onrender.com |
+| Frontend (Vercel) | https://taskplanet-social-weld.vercel.app/ |
+| Backend API (Render) | https://taskplanet-social-2mpp.onrender.com |
 
 
 ---
