@@ -8,12 +8,29 @@ const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/posts');
 
 const app = express();
+const parseCsv = (value) =>
+  typeof value === 'string'
+    ? value
+        .split(',')
+        .map((v) => v.trim())
+        .filter(Boolean)
+    : [];
+
+const allowedOrigins = new Set(parseCsv(process.env.CORS_ORIGINS));
+
+const isAllowedOrigin = (origin) => {
+  if (!origin) return true; // server-to-server / curl / same-origin
+  if (/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) return true;
+
+  // Allow Vercel deployments by default (adjust via CORS_ORIGINS to tighten)
+  if (/^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin)) return true;
+
+  if (allowedOrigins.has(origin)) return true;
+  return false;
+};
+
 const corsOptions = {
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
-    const allowed = /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin);
-    return callback(null, allowed);
-  },
+  origin: (origin, callback) => callback(null, isAllowedOrigin(origin)),
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   maxAge: 86400
