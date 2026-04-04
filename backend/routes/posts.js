@@ -1,13 +1,28 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const Post = require('../models/Post');
 const auth = require('../middleware/auth');
 
 const router = express.Router();
 
+const uploadsDir = path.join(__dirname, '..', 'uploads');
+fs.mkdirSync(uploadsDir, { recursive: true });
+
+const normalizeImageUrl = (image, baseUrl) => {
+  if (!image) return '';
+  if (image.startsWith('/uploads/')) return `${baseUrl}${image}`;
+
+  // fix legacy local-dev URLs stored in DB
+  const legacyLocal = image.match(/^https?:\/\/localhost:\d+\/uploads\/(.+)$/i);
+  if (legacyLocal) return `${baseUrl}/uploads/${legacyLocal[1]}`;
+
+  return image;
+};
+
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'),
+  destination: (req, file, cb) => cb(null, uploadsDir),
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase();
     const filename = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
@@ -29,7 +44,7 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
   try {
     const { text = '' } = req.body;
     const image = req.file
-      ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`
+      ? `/uploads/${req.file.filename}`
       : req.body.image || '';
 
     if (!text.trim() && !image) return res.status(400).json({ message: 'Text or image required' });
@@ -44,7 +59,11 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
     });
 
     await post.save();
-    res.status(201).json(post);
+
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const created = post.toObject();
+    created.image = normalizeImageUrl(created.image, baseUrl);
+    res.status(201).json(created);
   } catch (err) {
     console.error(err); res.status(500).json({ message: 'Server error' });
   }
@@ -55,7 +74,13 @@ router.get('/', async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
     const posts = await Post.find().sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit);
-    res.json(posts);
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const normalized = posts.map((p) => {
+      const obj = p.toObject();
+      obj.image = normalizeImageUrl(obj.image, baseUrl);
+      return obj;
+    });
+    res.json(normalized);
   } catch (err) {
     console.error(err); res.status(500).json({ message: 'Server error' });
   }

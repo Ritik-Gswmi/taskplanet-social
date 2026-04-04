@@ -2,12 +2,15 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/posts');
 
 const app = express();
+// Needed on platforms like Render so `req.protocol` reflects `x-forwarded-proto`
+app.set('trust proxy', 1);
 const parseCsv = (value) =>
   typeof value === 'string'
     ? value
@@ -39,6 +42,7 @@ app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+fs.mkdirSync(path.join(__dirname, 'uploads'), { recursive: true });
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/auth', authRoutes);
