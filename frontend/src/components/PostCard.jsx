@@ -54,11 +54,26 @@ const PostCard = ({ post, currentUserId, onLike, onComment, onEdit, onDelete }) 
         <Typography variant="caption" display="block" mt={1} sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}>{post.likes.length} likes • {post.comments.length} comments</Typography>
       </CardContent>
       <CardActions disableSpacing sx={{ flexWrap: 'wrap', p: { xs: 1, sm: 1.5 }, pt: 0 }}>
-        <IconButton onClick={() => onLike(post._id)} color={post.liked ? 'error' : 'default'} size="small">
-          <Badge badgeContent={post.likes.length} color="error"><FavoriteIcon fontSize="small" /></Badge>
+        <IconButton
+          onClick={() => onLike(post._id)}
+          size="small"
+          sx={{ color: post.liked ? 'error.main' : 'text.secondary' }}
+        >
+          <Badge badgeContent={post.likes.length} color="error">
+            <FavoriteIcon fontSize="small" sx={{ color: post.liked ? 'error.main' : 'inherit' }} />
+          </Badge>
         </IconButton>
-        <IconButton disabled size="small">
-          <Badge badgeContent={post.comments.length} color="primary"><CommentIcon fontSize="small" /></Badge>
+        <IconButton
+          disabled
+          size="small"
+          sx={{
+            color: 'primary.main',
+            '&.Mui-disabled': { color: 'primary.main', opacity: 1 }
+          }}
+        >
+          <Badge badgeContent={post.comments.length} color="primary">
+            <CommentIcon fontSize="small" sx={{ color: 'primary.main' }} />
+          </Badge>
         </IconButton>
         {owner && !isEditing && !confirmingDelete && (
           <>

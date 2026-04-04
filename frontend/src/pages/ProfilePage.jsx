@@ -72,7 +72,18 @@ const ProfilePage = () => {
       const { data } = await updateProfile(payload);
       setSuccess(data.message || 'Profile updated successfully');
 
-      const newUser = data?.user ? { username: data.user.username, email: data.user.email } : { username: usernameInput.trim(), email: emailInput.trim() };
+      const storedUser = (() => {
+        try {
+          return JSON.parse(localStorage.getItem('user')) || {};
+        } catch {
+          return {};
+        }
+      })();
+
+      const userId = data?.user?.id || storedUser.id || storedUser._id || null;
+      const newUser = data?.user
+        ? { id: userId, username: data.user.username, email: data.user.email }
+        : { id: userId, username: usernameInput.trim(), email: emailInput.trim() };
 
       setUser(newUser);
       setUsernameInput(newUser.username);

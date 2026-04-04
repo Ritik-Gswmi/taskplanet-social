@@ -21,8 +21,33 @@ const FeedPage = () => {
   const fileInputRef = useRef(null);
   const emojis = ['😀', '😄', '😍', '🔥', '🎉', '👍', '🤩'];
 
-  const user = JSON.parse(localStorage.getItem('user')) || { username: 'User', id: null };
-  const userId = user.id;
+  const getStoredUser = () => {
+    try {
+      return JSON.parse(localStorage.getItem('user')) || null;
+    } catch {
+      return null;
+    }
+  };
+
+  const getUserIdFromToken = () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return null;
+      const payload = token.split('.')[1];
+      if (!payload) return null;
+      const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4);
+      const json = atob(padded);
+      const parsed = JSON.parse(json);
+      return parsed?.id || null;
+    } catch {
+      return null;
+    }
+  };
+
+  const storedUser = getStoredUser();
+  const userId = storedUser?.id || storedUser?._id || getUserIdFromToken();
+  const user = storedUser || { username: 'User', id: userId };
 
   const filteredPosts = posts
     .filter((post) => {
@@ -50,8 +75,9 @@ const FeedPage = () => {
     setLoading(true);
     try {
       const { data } = await getPosts();
-      const userId = JSON.parse(localStorage.getItem('user'))?.id;
-      const normalized = data.map((post) => ({ ...post, liked: userId ? post.likes.includes(userId) : false }));
+      const stored = getStoredUser();
+      const currentUserId = stored?.id || stored?._id || getUserIdFromToken();
+      const normalized = data.map((post) => ({ ...post, liked: currentUserId ? post.likes.includes(currentUserId) : false }));
       setPosts(normalized);
     } catch (err) {
       setError('Could not load posts');
