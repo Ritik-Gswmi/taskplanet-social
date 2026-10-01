@@ -13,6 +13,7 @@ instance.interceptors.request.use((config) => {
   }
   const url = typeof config.url === 'string' ? config.url : '';
   const isAuthLoginOrSignup = url === '/auth/login' || url === '/auth/signup';
+  config.authToken = token || null;
   if (token && !isAuthLoginOrSignup) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
@@ -21,7 +22,13 @@ instance.interceptors.response.use(
   (response) => response,
   (error) => {
     const status = error?.response?.status;
-    if (status === 401) {
+    let currentToken = null;
+    try {
+      currentToken = localStorage.getItem('token');
+    } catch {
+      // ignore
+    }
+    if (status === 401 && error.config?.authToken && error.config.authToken === currentToken) {
       try {
         localStorage.removeItem('token');
         localStorage.removeItem('user');

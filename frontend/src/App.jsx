@@ -15,12 +15,12 @@ function App() {
       <Box sx={{ minHeight: '100vh', py: 3, px: 2, background: 'transparent' }}>
         <Container maxWidth="md" sx={{ py: 0 }}>
           <Routes>
-            <Route path="/" element={requireAuth() ? <Navigate to="/feed" /> : <Navigate to="/login" />} />
+            <Route path="/" element={requireAuth() ? <Navigate to="/feed" replace /> : <Navigate to="/login" replace />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
-            <Route path="/feed" element={requireAuth() ? <FeedPage /> : <Navigate to="/login" />} />
-            <Route path="/profile" element={requireAuth() ? <ProfilePage /> : <Navigate to="/login" />} />
-            <Route path="*" element={<Navigate to="/" />} />
+            <Route path="/feed" element={requireAuth() ? <FeedPage /> : <Navigate to="/login" replace />} />
+            <Route path="/profile" element={requireAuth() ? <ProfilePage /> : <Navigate to="/login" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Container>
       </Box>

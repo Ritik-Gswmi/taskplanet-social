@@ -193,7 +193,7 @@ const ProfilePage = () => {
 
       <Box mt={2} display="flex" gap={1} flexWrap="wrap">
         <Button variant="outlined" onClick={() => navigate('/feed')} sx={{ width: { xs: '100%', sm: 'auto' } }}>Back to Feed</Button>
-        <Button variant="contained" color="secondary" onClick={() => { localStorage.removeItem('token'); localStorage.removeItem('user'); navigate('/login'); }} sx={{ width: { xs: '100%', sm: 'auto' } }}>Logout</Button>
+        <Button variant="contained" color="secondary" onClick={() => { localStorage.removeItem('token'); localStorage.removeItem('user'); navigate('/login', { replace: true }); }} sx={{ width: { xs: '100%', sm: 'auto' } }}>Logout</Button>
       </Box>
     </Box>
   );

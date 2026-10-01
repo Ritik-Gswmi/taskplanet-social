@@ -30,9 +30,6 @@ const LoginPage = () => {
         return;
       }
       navigate('/feed', { replace: true });
-      setTimeout(() => {
-        if (window.location.pathname === '/login') window.location.replace('/feed');
-      }, 0);
     } catch (err) {
       console.error(err);
       if (axios.isAxiosError(err) && !err.response) {
