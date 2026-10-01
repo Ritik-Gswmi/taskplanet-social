@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Box, Paper, TextField, Button, Typography, Alert } from '@mui/material';
 import axios from 'axios';
 import { authLogin, API_BASE } from '../services/api';
 
 const LoginPage = () => {
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -29,7 +28,7 @@ const LoginPage = () => {
         setError('Login succeeded but browser storage is blocked. Disable private/incognito mode or allow site data, then try again.');
         return;
       }
-      navigate('/feed', { replace: true });
+      window.location.replace('/feed');
     } catch (err) {
       console.error(err);
       if (axios.isAxiosError(err) && !err.response) {
