@@ -19,6 +19,10 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    document.body.classList.toggle('dark-mode', localStorage.getItem('darkMode') === 'true');
+  }, []);
+
+  useEffect(() => {
     const fetchProfile = async () => {
       setLoading(true);
       try {
@@ -108,7 +112,7 @@ const ProfilePage = () => {
   return (
     <Box sx={{ px: { xs: 2, sm: 3, md: 4 }, py: 2, maxWidth: 800, mx: 'auto' }}>
       <Box display="flex" alignItems="center" gap={1} mb={2}>
-        <IconButton onClick={() => navigate('/feed')} size="small">
+        <IconButton onClick={() => navigate('/feed')} size="small" sx={{ color: 'inherit' }}>
           <ArrowBackIcon />
         </IconButton>
         <Typography variant="h4" sx={{ fontWeight: 900, letterSpacing: 1, color: '#1565c0', fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' } }}>Profile</Typography>
