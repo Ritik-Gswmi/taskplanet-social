@@ -4,6 +4,9 @@ body.dark-mode { background: radial-gradient(circle at top center, #1f2b46 0%, #
 body.dark-mode .social-card { background: #161f35 !important; border-color: #2d3f5d; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35); }
 body.dark-mode .social-mute { color: #8fa2c5; }
 body.dark-mode input, body.dark-mode textarea, body.dark-mode .MuiPaper-root { background: #1f293b; color: #e8ecff; }
+body.dark-mode .MuiTypography-root { color: #e8ecff; }
+body.dark-mode .MuiTypography-subtitle1, body.dark-mode .MuiTypography-caption { color: #b9c7df !important; }
+body.dark-mode .MuiInputLabel-root, body.dark-mode input::placeholder, body.dark-mode textarea::placeholder { color: #b9c7df; opacity: 1; }
 #root { min-height: 100vh; }
 .social-card { border-radius: 16px; box-shadow: 0 10px 30px rgba(38, 77, 143, 0.12); }
 .social-mute { color: #5a6781; }
